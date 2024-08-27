@@ -71,6 +71,7 @@ merger:
   mergeFrameID: "/base_link"
   mergeLaserScanTopic: "/laserscan/merged"
   mergeLaserScanNum: 2
+  mergeTimeout: 0.2
   publishPointCloud: true
   pointCloudTopic: "/laserscan/merged/points"
 
@@ -90,6 +91,7 @@ lidar2:
 | merger.mergeFrameID | string | The frame ID for the merged output. | "/base_link" |
 | merger.mergeLaserScanTopic | string | The topic name where the merged LaserScan data will be published. | "/laserscan/merged" |
 | merger.mergeLaserScanNum | int | The number of LaserScan topics to merge. | 2 |
+| merger.mergeTimeout | float | Timeout for merging LaserScan [s] | 0.2 |
 | merger.publishPointCloud | bool | A flag to enable or disable PointCloud publishing. | true |
 | merger.pointCloudTopic | string | The topic name where the merged PointCloud data will be published. This is required if PointCloud is enabled. | "/laserscan/merged/points" |
 | lidarX.laserScanTopic | string | The ROS topic name for the LaserScan data from LiDAR sensor X. | "/laserscan1" |

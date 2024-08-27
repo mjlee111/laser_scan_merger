@@ -17,6 +17,10 @@ LaserScanMerger::LaserScanMerger()
         laser_scan_topic[i], 10, boost::bind(&LaserScanMerger::LaserScanCallback, this, _1, i)));
   }
   merged_scan_pub = nh_.advertise<sensor_msgs::LaserScan>(merge_laser_scan_topic, 1);
+  if (point_cloud_publish)
+  {
+    merged_points_pub = nh_.advertise<sensor_msgs::PointCloud>(point_cloud_topic, 1);
+  }
 }
 
 void LaserScanMerger::LaserScanCallback(const sensor_msgs::LaserScanConstPtr& laser, int num)
@@ -77,6 +81,11 @@ void LaserScanMerger::PublishMergedLaserScan()
     }
 
     merged_scan_pub.publish(merged_scan);
+    if (point_cloud_publish)
+    {
+      sensor_msgs::PointCloud pointcloud_msg = LaserScanToPointCloud(merged_scan);
+      merged_points_pub.publish(pointcloud_msg);
+    }
   }
 }
 
@@ -118,20 +127,20 @@ void LaserScanMerger::transformLaserScan(const sensor_msgs::LaserScan& input_sca
   }
 }
 
-sensor_msgs::PointCloud LaserScanMerger::LaserScanToPointCloud(const sensor_msgs::LaserScanConstPtr& laser)
+sensor_msgs::PointCloud LaserScanMerger::LaserScanToPointCloud(const sensor_msgs::LaserScan& laser)
 {
   sensor_msgs::PointCloud cloud;
 
-  cloud.header = laser->header;
+  cloud.header = laser.header;
 
-  cloud.points.resize(laser->ranges.size());
+  cloud.points.resize(laser.ranges.size());
 
-  for (size_t i = 0; i < laser->ranges.size(); ++i)
+  for (size_t i = 0; i < laser.ranges.size(); ++i)
   {
-    if (std::isfinite(laser->ranges[i]))
+    if (std::isfinite(laser.ranges[i]))
     {
-      float angle = laser->angle_min + i * laser->angle_increment;
-      float range = laser->ranges[i];
+      float angle = laser.angle_min + i * laser.angle_increment;
+      float range = laser.ranges[i];
 
       cloud.points[i].x = range * std::cos(angle);
       cloud.points[i].y = range * std::sin(angle);
@@ -180,18 +189,18 @@ int LaserScanMerger::loadConfigData(const std::string& path)
   merge_laser_scan_topic = config["merger"]["mergeLaserScanTopic"].as<std::string>();
   max_lidar_count = config["merger"]["mergeLaserScanNum"].as<int>();
   timeout = config["merger"]["mergeTimeout"].as<float>();
-  pointCloudPublish = config["merger"]["publishPointCloud"].as<bool>();
+  point_cloud_publish = config["merger"]["publishPointCloud"].as<bool>();
 
   ROS_INFO_NAMED("Merger", "Merged Laser Scan Frame ID: %s", merge_frame_id.c_str());
   ROS_INFO_NAMED("Merger", "Merged Laser Scan Topic: %s", merge_laser_scan_topic.c_str());
   ROS_INFO_NAMED("Merger", "Merging %d laser scan topics", max_lidar_count);
   ROS_INFO_NAMED("Merger", "Merger Timeout setted to : %f [s]", timeout);
 
-  if (pointCloudPublish)
+  if (point_cloud_publish)
   {
-    pointCloudTopic = config["merger"]["pointCloudTopic"].as<std::string>();
+    point_cloud_topic = config["merger"]["pointCloudTopic"].as<std::string>();
     ROS_INFO_NAMED("Merger", "PointCloud publish enabled");
-    ROS_INFO_NAMED("Merger", "Merged PointCloud Topic: %s", pointCloudTopic.c_str());
+    ROS_INFO_NAMED("Merger", "Merged PointCloud Topic: %s", point_cloud_topic.c_str());
   }
   else
   {

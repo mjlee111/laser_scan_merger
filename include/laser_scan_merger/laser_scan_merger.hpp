@@ -25,7 +25,7 @@ class LaserScanMerger
 public:
   LaserScanMerger();
   void LaserScanCallback(const sensor_msgs::LaserScanConstPtr& laser, int num);
-  sensor_msgs::PointCloud LaserScanToPointCloud(const sensor_msgs::LaserScanConstPtr& laser);
+  sensor_msgs::PointCloud LaserScanToPointCloud(const sensor_msgs::LaserScan& laser);
   void transformLaserScan(const sensor_msgs::LaserScan& input_scan, sensor_msgs::LaserScan& output_scan,
                           const std::array<float, 6>& tf);
   void PublishMergedLaserScan();
@@ -40,8 +40,8 @@ private:
   int max_lidar_count;
   std::string merge_frame_id;
   std::string merge_laser_scan_topic;
-  bool pointCloudPublish;
-  std::string pointCloudTopic;
+  bool point_cloud_publish;
+  std::string point_cloud_topic;
   float timeout = 1.0;  // [s]
 
   std::vector<ros::Subscriber> laser_scan_sub;
@@ -52,6 +52,7 @@ private:
   std::vector<ros::Time> scan_time;
 
   ros::Publisher merged_scan_pub;
+  ros::Publisher merged_points_pub;
 };
 
 #endif

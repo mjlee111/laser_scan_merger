@@ -1,0 +1,9 @@
+<launch>
+    <!-- Define the config_file_path argument -->
+    <arg name="config_file_path" default="$(find laser_scan_merger)/config/laser_config.yaml" />
+  
+    <node name="laser_scan_merger" pkg="laser_scan_merger" type="laser_scan_merger_node" output="screen">
+      <param name="config_file_path" value="$(arg config_file_path)" />
+    </node>
+  </launch>
+  

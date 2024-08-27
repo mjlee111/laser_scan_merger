@@ -3,8 +3,13 @@
 LaserScanMerger::LaserScanMerger()
 {
   nh_ = ros::NodeHandle("~");
+
   std::string package_path = ros::package::getPath("laser_scan_merger");
   std::string config_path = package_path + "/config/laser_config.yaml";
+
+  ros::param::get("/laser_scan_merger/config_file_path", config_path);
+
+  ROS_INFO_NAMED("Merger", "Found Config File on %s", config_path.c_str());
   loadConfigData(config_path);
   for (int i = 0; i < max_lidar_count; i++)
   {

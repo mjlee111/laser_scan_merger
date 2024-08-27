@@ -1,7 +1,8 @@
 merger:
-  mergeFrameID: "/base_link"
+  mergeFrameID: "/laser_frame"
   mergeLaserScanTopic: "/laserscan/merged"
   mergeLaserScanNum: 4
+  mergeTimeout: 0.2
   publishPointCloud: false
   pointCloudTopic: "/laserscan/merged/points"
 

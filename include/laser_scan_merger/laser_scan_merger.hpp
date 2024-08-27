@@ -2,6 +2,8 @@
 #define LASER_SCAN_MERGER_HPP
 
 #include <iostream>
+#include <cmath>
+#include <algorithm>
 #include <sstream>
 #include <fstream>
 #include <yaml-cpp/yaml.h>
@@ -11,7 +13,12 @@
 #include <ros/package.h>
 #include <sensor_msgs/LaserScan.h>
 #include <sensor_msgs/PointCloud.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <pcl_conversions/pcl_conversions.h>
+#include <tf/transform_listener.h>
+#include <tf/transform_datatypes.h>
+#include <tf/LinearMath/Transform.h>
+#include <tf/LinearMath/Matrix3x3.h>
 
 class LaserScanMerger
 {
@@ -19,6 +26,10 @@ public:
   LaserScanMerger();
   void LaserScanCallback(const sensor_msgs::LaserScanConstPtr& laser, int num);
   sensor_msgs::PointCloud LaserScanToPointCloud(const sensor_msgs::LaserScanConstPtr& laser);
+  void transformLaserScan(const sensor_msgs::LaserScan& input_scan, sensor_msgs::LaserScan& output_scan,
+                          const std::array<float, 6>& tf);
+  void PublishMergedLaserScan();
+  bool AllScansReceived();
 
 private:
   ros::NodeHandle nh_;
@@ -31,14 +42,16 @@ private:
   std::string merge_laser_scan_topic;
   bool pointCloudPublish;
   std::string pointCloudTopic;
+  float timeout = 1.0;  // [s]
 
   std::vector<ros::Subscriber> laser_scan_sub;
   std::vector<std::string> laser_scan_topic;
   std::vector<std::string> laser_scan_frame_id;
   std::vector<std::array<float, 6>> tf;
   std::vector<sensor_msgs::LaserScan> scan_data;
+  std::vector<ros::Time> scan_time;
 
-  ros::Publisher merged_scan_pub_;
+  ros::Publisher merged_scan_pub;
 };
 
 #endif

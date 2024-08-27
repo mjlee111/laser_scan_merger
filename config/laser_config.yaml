@@ -1,0 +1,26 @@
+merger:
+  mergeFrameID: "/base_link"
+  mergeLaserScanTopic: "/laserscan/merged"
+  mergeLaserScanNum: 4
+  publishPointCloud: false
+  pointCloudTopic: "/laserscan/merged/points"
+
+lidar1:
+  laserScanTopic: "/laserscan1"
+  laserScanframeID: "/laserscan1"
+  tf: "1.0 0.0 0.2 0.0 0.0 0.0"
+
+lidar2:
+  laserScanTopic: "/laserscan2"
+  laserScanframeID: "/laserscan2"
+  tf: "2.0 0.0 0.2 0.0 0.0 0.0"
+
+lidar3:
+  laserScanTopic: "/laserscan3"
+  laserScanframeID: "/laserscan3"
+  tf: "1.0 0.0 0.2 0.0 0.0 0.0"
+
+lidar4:
+  laserScanTopic: "/laserscan4"
+  laserScanframeID: "/laserscan4"
+  tf: "2.0 0.0 0.2 0.0 0.0 0.0"

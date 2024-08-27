@@ -52,11 +52,18 @@ $ sudo apt-get install libpcl-dev
     ```
 
 ## Usage
+### Default Config file with `rosrun`
 You can start the `laser_scan_merger` node using the following command:
 ```shell
 $ rosrun laser_scan_merger laser_scan_merger_node
 ```
 Ensure that you have configured the `config/laser_config.yaml` file to define the topics, frames, and transformations for each of your LiDAR sensors.
+
+### Other Config file with `roslaunch`
+You can start the `laser_scan_merger` node with other config files using the following command:
+```shell
+$ roslaunch laser_scan_merger laser_scan_merger.launch config_file_path:=${CONFIG_FILE_PATH}
+```
 
 ### Example Configuration (YAML)
 ```yaml
@@ -88,6 +95,19 @@ lidar2:
 | lidarX.laserScanTopic | string | The ROS topic name for the LaserScan data from LiDAR sensor X. | "/laserscan1" |
 | lidarX.laserScanframeID | string | The frame ID for the LaserScan data from LiDAR sensor X. | "/laserscan1" |
 | lidarX.tf | string | A space-separated string of 6 float values representing the translation (x, y, z) and rotation (r, p, y) of the LiDAR sensor X. | "1.0 0.0 0.2 0.0 0.0 0.0" |
+
+### Example Configuration (Launch)
+```xml
+<launch>
+    <!-- Define the config_file_path argument -->
+    <arg name="config_file_path" default="$(find laser_scan_merger)/config/laser_config.yaml" />
+  
+    <node name="laser_scan_merger" pkg="laser_scan_merger" type="laser_scan_merger_node" output="screen">
+      <param name="config_file_path" value="$(arg config_file_path)" />
+    </node>
+  </launch>
+  
+```
 
 ## Configuration
 The package is configured using a YAML file that specifies the number of LiDAR sensors, their topics, and their respective transformation frames.

@@ -130,4 +130,4 @@ This project is licensed under the MIT License - see the [LICENSE][LICENSE] file
 ## Contact
 For any questions or feedback, please contact [menggu1234@naver.com][email].
 
-[email]: menggu1234@naver.com
+[email]: mailto:menggu1234@naver.com

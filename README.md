@@ -126,3 +126,8 @@ Feel free to submit issues, feature requests, and pull requests to improve the p
 This project is licensed under the MIT License - see the [LICENSE][LICENSE] file for details.
 
 [LICENSE]: https://github.com/mjlee111/laser_scan_merger/blob/master/LICENSE
+
+## Contact
+For any questions or feedback, please contact [menggu1234@naver.com][email].
+
+[email]: menggu1234@naver.com

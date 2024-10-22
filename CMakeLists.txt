@@ -6,7 +6,6 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   pcl_ros
   pcl_conversions
-  YAML-CPP
 )
 
 find_package(yaml-cpp REQUIRED)
